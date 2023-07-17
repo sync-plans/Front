@@ -1,0 +1,35 @@
+{
+  "team-plan": [
+    {}
+  ],
+  "kakao": [
+    {
+      "callback": ""
+    }
+  ],
+  "users": [
+    {
+      "id": 2911714732,
+      "nickname": "국환",
+      "myplan" : [
+        {
+          "id": 1,
+          "start": "2023-07-14T12:52:28.480369",
+          "end": "2023-07-16T14:52:28.480369",
+          "priority": "int",
+          "title": "test1",
+          "content": "contetn1",
+          "labelColor" : "green"
+        },
+        {
+            "id": 2,
+            "start": "2023-07-14T12:52:28.480369",
+            "end": "2023-07-14T14:52:28.480369",
+            "priority": "int",
+            "title": "test2",
+            "content": "contetn2"
+          }
+      ]
+    }
+  ]
+}
