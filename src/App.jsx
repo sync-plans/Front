@@ -1,9 +1,19 @@
 import './App.css';
+import Router from './shared/Router';
+
+import { QueryClient, QueryClientProvider} from 'react-query';
+
+
+
+const queryClient = new QueryClient();
 
 function App() {
+
+
   return (
-    <div className="App">
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <Router/>
+    </QueryClientProvider>
   );
 }
 
