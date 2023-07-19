@@ -5,15 +5,19 @@ import axios from "axios";
 function KaKaoLogin() {
 const navigate = useNavigate();
 
+
+
 useEffect(()=> {
     const params = new URL(document.location.toString()).searchParams;
-    const code = params.get('code') //인가 코드를 받는다.
+    // const code = params.get('code') //인가 코드를 받는다.
+    // console.log(code)
     const grant_type = 'authorization_code';
+    const code = params.get('code') //인가 코드를 받는다.
 
     
     
 
-    axios.post(`https://kauth.kakao.com/oauth/token?grant_type=${grant_type}&client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=http://localhost:3000/oauth/kakao/callback&code=${code}`,
+    axios.post(`https://kauth.kakao.com/oauth/token?grant_type=${grant_type}&client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=http://localhost:4000/oauth/kakao/callback&code=${code}`,
         {},
         {
             headers: {
@@ -32,16 +36,17 @@ useEffect(()=> {
                     }
                 }
             ).then((res) => {
+                console.log(res)
                 const userId = res.data.id
                 const nickname = res.data.properties.nickname
-                axios.get(`${process.env.REACT_APP_SERVER_URL}/users/${userId}`).
+                axios.get(`${process.env.REACT_APP_SERVER2_URL}/users/${userId}`).
                 then((res) => {
                     if(res.data){
                         setTimeout(() => {
                             navigate(`/main/${userId}`)
                         }, 2000);
                     } else {
-                        axios.post(`${process.env.REACT_APP_SERVER_URL}/users`, {
+                        axios.post(`${process.env.REACT_APP_SERVER2_URL}/users`, {
                             id: userId,
                             nickname : nickname,
                         }).then(() => {

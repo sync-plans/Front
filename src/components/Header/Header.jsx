@@ -19,7 +19,6 @@ const ToggleSidebarBtn = () => {
 
   return (
     <HeaderContainer>
-        <ToggleBtn onClick={ToggleSidebarBtn}><BsList/></ToggleBtn>
     </HeaderContainer>
   )
 }
@@ -31,6 +30,7 @@ const HeaderContainer = styled.div`
     align-items : center;
     gap : 10px;
     background-color : #eee;
+    height : 60px;
 `
 
 const ToggleBtn = styled.button`
