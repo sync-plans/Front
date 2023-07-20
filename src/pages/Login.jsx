@@ -46,11 +46,21 @@ const value = async () => {
   // console.log(response)
 
   setCookie('myCookie', plan_token, '/')
+
+  // const getdata = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/my-plan`, {
+  //   headers: {
+  //     Authorization : cookies['myCookie']
+  //   }
+  // })
+
+
 }
 
 useEffect(() => {
   value()
 }, []);
+
+
 
 // const myplan = async () => {
 //   const response = await axios.get(`https://ec2-13-125-17-195.ap-northeast-2.compute.amazonaws.com:8080/api/my-plan`, {
@@ -66,14 +76,15 @@ useEffect(() => {
 
 
 const handleLogin = () => {
-  window.location.href = KAKAO_AUTH_URL
+  window.location.href = 'http://localhost:4000/main/'
 }
   return (
     <LoginContainer>
       <LoginBackGround>
       <LoginBox>
         <LoginWrraper>
-        <h1>Sync Plans</h1>
+        {/* <h1>Sync Plans</h1> */}
+        <LoginTitle src='img/twitter_header_photo_1.png' alt='제목이미지'></LoginTitle>
         <KaKaoLoginBtn onClick={handleLogin}>
           <img src='img/kakao_login_medium_narrow.png' alt='React'></img>
         </KaKaoLoginBtn>
@@ -107,6 +118,7 @@ const LoginBox = styled.div`
     box-shadow : 0px 0px 10px;
     border : none;
     max-width : 350px;
+    background-color : rgb(246,248,252);
 `
 
 const KaKaoLoginBtn = styled.a`
@@ -121,6 +133,7 @@ const KaKaoLoginBtn = styled.a`
 const LoginWrraper = styled.div`
   display : flex;
   flex-direction : column;
+  align-items : center;
   gap : 200px;
 `
 
@@ -133,6 +146,10 @@ const LoginBackGround = styled.div`
   position : absolute;
   top : 0;
   left : 0;
+`
+
+const LoginTitle = styled.img`
+  width : 300px;
 `
 
 

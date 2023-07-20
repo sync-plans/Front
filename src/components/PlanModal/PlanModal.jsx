@@ -2,19 +2,21 @@ import { createContext, useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { styled } from "styled-components";
 import { deletePlan, patchPlan } from "../../api/my-plan";
-import TitleInput from "./TitleInput";
 import dayjs from "dayjs";
 import { useCookies } from "react-cookie";
 function PlanModal({ event, onclose }) {
 
   const [cookies] = useCookies()
 
-  const [toggleState, setToggleState] = useState(false);
-  const [newTitle, setNewTitle] = useState(event.title);
-  
-  const queryClient = useQueryClient();
+  const [planTitle, setPlanTitle] = useState(event.title);
+  const [planContent, setPlanContent] = useState(event.content);
+  const [startDate, setStartDate] = useState(dayjs(event.start).format('YYYY-MM-DDTHH:mm'));
+  const [EndDate, setEndDate] = useState(dayjs(event.end).format('YYYY-MM-DDTHH:mm'));
 
-  console.log(event.id)
+
+
+
+  const queryClient = useQueryClient();
 
   const deleteplanmutate = useMutation(deletePlan, {
     onSuccess: () => {
@@ -33,46 +35,50 @@ function PlanModal({ event, onclose }) {
     onclose();
   };
 
-  const handlePatchMyplan = (event, Titlevalue) => {
-    console.log(Titlevalue)
-    patchMutate.mutate({id : event.id, title : Titlevalue})
+  const handlePatchMyplan = (event, cookies) => {
+    const setData = {
+      id : event.id,
+      title : planTitle,
+      content : planContent,
+      startDate : dayjs(startDate),
+      endDate : dayjs(EndDate),
+      priority : 1,
+    }
+    patchMutate.mutate({event, cookies, setData})
   }
 
-  const handleToggleMyplan = () => {
-    setToggleState(!toggleState);
-  };
-
-  const handleInputChange = (e) => {
+  const handleInputChange = (e,setState) => {
     const {value} = e.target
-    setNewTitle(value)
+    setState(value)
   }
+
+  const handleDateChange = (event) => {
+    setStartDate(event.target.value);
+  };
 
   return (
     <PlanModalLayout>
-      <div>
+        <PlanModalHeader>
         <button onClick={onclose}>X</button>
-        {toggleState ? (
-          <TitleInput event={event} value={newTitle} onChange={handleInputChange}></TitleInput>
-        ) : (
-          <p>{event.title}</p>
-        )}
-        <p>{event.content}</p>
-        <div style={{ display: "flex" }}>
-          <p>{dayjs(event.start).format('YYYY-MM-DD HH:mm:ss')}</p>
-          <p>{dayjs(event.end).format('YYYY-MM-DD HH:mm:ss')}</p>
-        </div>
-        <div>
-          <button onClick={handleToggleMyplan}>수정</button>
-          <button onClick={() => handleDeleteMyplan(event,cookies)}>삭제</button>
-          <button onClick={() => handlePatchMyplan(event,newTitle)}>확인</button>
-        </div>
-      </div>
+        </PlanModalHeader>
+        <PlanModalInputBox>
+          <label>제목 :</label><PlanModalInput value={planTitle} onChange={(e) =>handleInputChange(e,setPlanTitle)}></PlanModalInput>
+          <label>내용 :</label><PlanModalInput value={planContent} onChange={(e) =>handleInputChange(e, setPlanContent)}></PlanModalInput>
+        </PlanModalInputBox>
+        <PlanModalDateBox>
+          <PlanDateInput type='datetime-local' value={startDate} onChange={(e) => handleDateChange(e,setStartDate)}></PlanDateInput>
+          <PlanDateInput type='datetime-local' value={EndDate} onChange={(e) => handleDateChange(e, setEndDate)}></PlanDateInput>
+        </PlanModalDateBox>
+        <PlanModalBtnBox>
+          <PlanModalBtn bh='#0085ddea' bc='#0083DD;' onClick={() => handlePatchMyplan(event,cookies)}>수정</PlanModalBtn>
+          <PlanModalBtn bh='#ed5e87d0' bc='#e33768ea;'onClick={() => handleDeleteMyplan(event,cookies)}>삭제</PlanModalBtn>
+        </PlanModalBtnBox>
     </PlanModalLayout>
   );
 }
 
 const PlanModalLayout = styled.div`
-  width: 500px;
+  width: 400px;
   height: 400px;
   background-color: white;
   position: fixed;
@@ -80,9 +86,63 @@ const PlanModalLayout = styled.div`
   left: 50%;
   z-index: 5;
   transform: translate(-50%, -50%);
-  padding: 15px;
   border-radius: 15px;
   box-shadow: 0px 0px 10px;
 `;
+
+const PlanModalHeader = styled.div`
+      padding : 15px;
+    display : flex;
+    background-color : rgb(0, 172, 222);
+    align-items : center;
+    justify-content : space-between;
+    box-shadow : 0px 0.5px 3px;
+`
+
+const PlanModalInputBox = styled.div`
+  display : flex;
+  flex-direction : column;
+  padding : 15px;
+  gap : 10px;
+`
+
+const PlanModalInput = styled.input`
+  height : 50px;
+  border-radius :15px;
+  border : 1px solid rgb(215,215,215);
+  box-shadow : 1px 1px 3px;
+  font-size : 1rem;
+`
+
+const PlanModalDateBox = styled.div`
+  padding : 15px;
+  display : flex;
+  gap : 10px;
+`
+
+const PlanDateInput = styled.input`
+  width : 200px;
+`
+
+const PlanModalBtnBox = styled.div`
+  display : flex;
+  padding : 15px;
+  justify-content : space-around;
+`
+
+const PlanModalBtn = styled.button`
+  padding : 10px;
+  width : 100px;
+  border-radius : 10px;
+  border : none;
+  color : white;
+  font-weight : bold;
+  background-color : ${({bc}) => bc};
+  cursor : pointer;
+
+  &:hover{
+    background-color : ${({bh}) => bh}
+  }
+`
 
 export default PlanModal;

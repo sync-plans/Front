@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 import { useState } from "react";
 import { styled } from "styled-components"
-import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import CustomParseFormat from 'dayjs/plugin/customParseFormat'
 import { createPlan } from "../../api/my-plan";
@@ -11,16 +10,20 @@ import {AiOutlineClose} from 'react-icons/ai'
 import { useCookies } from "react-cookie";
 
 function PlanCreateModal({event, onclose}) {
+    dayjs.extend(timezone);
+    dayjs.extend(CustomParseFormat);
 
     const [cookies] = useCookies();
 
     const queryClient = useQueryClient();
-    const currentDate = dayjs(event).format('YYYY-MM-DDTHH:mm:ssZ')
+    const currentDate = dayjs(event)
     // const currentDate = new Date(event)
+    console.log(currentDate)
 
-    const [selectedStartDate, setSelectedStartDate] = useState(currentDate);
-    const [selectedEndDate, setSelectedEndDate] = useState(currentDate);
-    const [selectedPriority, setSelectedPriority] = useState([1,2,3,4])
+
+    const [selectedStartDate, setSelectedStartDate] = useState(currentDate.format('YYYY-MM-DDTHH:mm'));
+    const [selectedEndDate, setSelectedEndDate] = useState(currentDate.format('YYYY-MM-DDTHH:mm'));
+    const [selectedPriority, setSelectedPriority] = useState(1)
     const [titleState,setTitleState] = useState('');
     const [contentState,setContentState] = useState('');
 
@@ -53,25 +56,26 @@ function PlanCreateModal({event, onclose}) {
 
     const handleCreatePlan = () => {
         const userData = {
-            id : Date.now(),
             title : titleState,
             content : contentState,
             startDate : dayjs(selectedStartDate),
             endDate : dayjs(selectedEndDate),
-            priority : 1
+            priority : selectedPriority,
         }
         createPlanMutation.mutate({userData,cookies})
     }
-    dayjs.extend(utc);
-    dayjs.extend(timezone);
-    dayjs.extend(CustomParseFormat);
+
+    const handlePriorityChange = (e) => {
+        setSelectedPriority(Number(e.target.value))
+    }
+
     // console.log(dayjs(selectedStartDate).format('YYYY-MM-DD HH:MM:ss:Z'))
     // console.log(dayjs(selectedStartDate).toDate().getTime())
 
   return (
     <CreateModalLayOut>
         <CreateModalHeader>
-            <HeaderName>{<FiPlusSquare style={{fontSize : '18px'}}/>}등록</HeaderName>
+            <HeaderName>{<FiPlusSquare style={{fontSize : '18px'}}/>}일정등록</HeaderName>
             <CustomCloseBtn onClick={onclose}/>
         </CreateModalHeader>
         <CreateModalBody>
@@ -86,24 +90,28 @@ function PlanCreateModal({event, onclose}) {
             </DateBox>
         </DateContainer>
         <Priority>
-            <select>
-                <option value={selectedPriority[0]}>우선순위1</option>
-                <option value={selectedPriority[1]}>우선순위2</option>
-                <option value={selectedPriority[2]}>우선순위3</option>
-                <option value={selectedPriority[3]}>기타순위</option>
+            <select value={selectedPriority} onChange={handlePriorityChange}>
+                <option value={1}>우선순위1</option>
+                <option value={2}>우선순위2</option>
+                <option value={3}>우선순위3</option>
+                <option value={4}>기타순위</option>
             </select>
         </Priority>
+        <InputContainer>
+        <TitleInputBox>
+            <label>제목 :</label>
+            <MessegeInput type="text" onChange={(e) => handleInputToggleChange(e,setTitleState)} value={titleState}/>
+        </TitleInputBox>
         <div>
-            <label htmlFor="">제목</label><input type="text" onChange={(e) => handleInputToggleChange(e,setTitleState)} value={titleState}/>
+            <label>내용 :</label>
+            <MessegeInput type="text" onChange={(e) => handleInputToggleChange(e,setContentState)} value={contentState}/>
         </div>
-        <div>
-            <label htmlFor="">내용</label><input type="text" onChange={(e) => handleInputToggleChange(e,setContentState)} value={contentState}/>
-        </div>
+        </InputContainer>
         </CreateModalBody>
-        <div>
-            <button onClick={handleCreatePlan}>등록</button>
-            <button>취소</button>
-        </div>
+        <ButtonContainer>
+            <SubmitBtn onClick={handleCreatePlan}>등록</SubmitBtn>
+            <CancleBtn onClick={onclose}>취소</CancleBtn>
+        </ButtonContainer>
     </CreateModalLayOut>
   )
 }
@@ -119,6 +127,8 @@ const CreateModalLayOut = styled.div`
     max-width : 500px;
     height : 400px;
     width : 400px;
+    display : flex;
+    flex-direction : column;
 `
 
 const DateInput = styled.input`
@@ -149,7 +159,7 @@ const CreateModalHeader = styled.div`
     background-color : rgb(0, 172, 222);
     align-items : center;
     justify-content : space-between;
-    box-shadow : 0px 0.5px 3px
+    box-shadow : 0px 0.5px 3px;
 `
 
 const CustomCloseBtn = styled(AiOutlineClose)`
@@ -175,6 +185,7 @@ const CreateModalBody = styled.div`
 const DateContainer = styled.div`
     display : flex;
     gap : 20px;
+    justify-content : center;
 `
 
 const DateBox = styled.div`
@@ -189,15 +200,77 @@ const DateBox = styled.div`
 `
 const Priority = styled.div`
     padding : 20px 0px;
+    display : flex;
+    justify-content : center;
 
     > select {
-        width : 150px;
-        height : 50px;
+        width : 290px;
+        height : 30px;
         border-radius : 5px;
         border-color : #636060;
         opacity : 0.6;
     }
+`
 
+const InputContainer = styled.div`
+    display : flex;
+    flex-direction : column;
+    padding : 5px;
+    gap : 20px;
+`
+
+const TitleInputBox = styled.div`
+
+`
+
+const MessegeInput = styled.input`
+    width : 290px;
+    height : 30px;
+    border-radius : 5px;
+    border : 1px solid rgb(215,215,215);
+`
+
+const ButtonContainer = styled.div`
+    display : flex;
+    padding : 15px;
+    width : 100%;
+    justify-content : space-around;
+`
+
+const SubmitBtn = styled.button`
+    width : 100px;
+    height : 50px;
+    border-radius : 10px;
+    background-color : #0083DD;
+    color : white;
+    font-size : 1.3rem;
+    border : none;
+    font-weight : bold;
+
+    &:hover{
+        background-color : #0085ddea;
+    }
+    &:active{
+        background-color : #0c4164ea;
+    }
+`
+
+const CancleBtn = styled.button`
+    width : 100px;
+    height : 50px;
+    border-radius : 10px;
+    background-color : #e33768ea;
+    color : white;
+    font-size : 1.3rem;
+    border : none;
+    font-weight : bold;
+
+    &:hover{
+        background-color : #ed5e87d0;
+    }
+    &:active{
+        background-color : #771515;
+    }
 `
 
 

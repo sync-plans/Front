@@ -1,10 +1,9 @@
 import { Calendar, dayjsLocalizer } from "react-big-calendar";
 import dayjs from "dayjs";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import "moment/locale/ko";
 import "dayjs/locale/ko";
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useQuery} from "react-query";
 import { planId } from "../../api/my-plan";
 import PlanModal from "../PlanModal/PlanModal";
 import { useParams } from "react-router-dom";
@@ -25,16 +24,21 @@ const MyCalendar = ({ plan }) => {
   const today = dayjs().startOf("day");
   const date = new Date();
   const now = dayjs(date);
-  const currentdate = now.format("YYYY-MM-DD HH:MM:ss");
+  const currentdate = now.format("YYYY-MM-DD HH:MM");
   const [currentDate, setCurrentDate] = useState(currentdate);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedEvent2, setSelectedEvent2] = useState(null);
 
   const handleEventClick = (event) => {
+        // 클릭한 이벤트 객체의 시작시간과 종료시간 추출
+    
     setSelectedEvent(event);
   };
 
   const handleEventClick2 = (event) => {
+
+    console.log('시작 시간:', dayjs(event.start).format('YYYY-MM-DD HH:mm'));
+    console.log('종료 시간:', dayjs(event.End).format('YYYY-MM-DD HH:mm'));
     setSelectedEvent2(event);
   };
 
@@ -52,7 +56,17 @@ const MyCalendar = ({ plan }) => {
     setCurrentDate(today);
   };
   const param = useParams();
-  const { data, isLoading, isError } = useQuery("myplan", () => (planId(cookies)));
+  const { data, isLoading, isError } = useQuery("myplan", () => (plan(cookies)));
+  console.log(data)
+  if(isLoading){
+    return (
+      <h3>로딩중..</h3>
+    )
+  }
+  if(isError){
+    return <h3>값을 가져오지 못했습니다</h3>
+  }
+
   // const eventStyleGetter = (start,end,event) => {
   //   // const isWeekend = start.getDay() === 0 || end.getDay() === 6;
 
@@ -80,9 +94,9 @@ const MyCalendar = ({ plan }) => {
           </S.TitleDate>
           <S.ArrowBtn onClick={handleNext}>{<AiOutlineRight />}</S.ArrowBtn>
         </S.CalenderTitle>
-        <button style={{}} onClick={handleToday}>
+        <S.TodayBtn style={{}} onClick={handleToday}>
           Today
-        </button>
+        </S.TodayBtn>
       </S.CalenderHeader>
       <div style={{height : '70%'}}>
       <CustomCalendar
@@ -103,6 +117,7 @@ const MyCalendar = ({ plan }) => {
         onNavigate={currentDate}
         // eventPropGetter={eventStyleGetter}
       />
+      <button></button>
       </div>
       {selectedEvent && (
         <PlanModal

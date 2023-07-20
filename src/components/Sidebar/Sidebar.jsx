@@ -1,6 +1,5 @@
 import { keyframes, styled } from "styled-components"
 import {css} from "styled-components"
-import {AiOutlinePlusCircle} from "react-icons/ai"
 import { useState } from "react";
 import PlanCreateModal from "../PlanCreateModal/PlanCreateModal";
 function Sidebar() {
@@ -12,10 +11,11 @@ function Sidebar() {
 
   const handleShowSidebar = () => {
     setToggleSideState(!toggleSideState)
+    console.log(toggleSideState)
   }
   return (
     <>
-    <SidebarContainer show={toggleSideState}> 
+    <SidebarContainer show={toggleSideState.toString()}> 
         <Navbar>
           <Nav>
             <div>
@@ -164,16 +164,28 @@ const slideOut = keyframes`
 `;
 
 
+// const SidebarContainer = styled.div.attrs((props) => )`
+//   display : flex;
+//   flex-direction : row;
+//   position : fixed;
+//   z-index: 5;
+//   top : 0px;
+//   left : ${({show}) => show ? '0px' : '-250px'};
+//   height : 100vh;
+//   transition : 0.3 ease;
+//   animation : ${({show}) => (show ? slideIn : slideOut)} 0.3s ease;
+// `
+
 const SidebarContainer = styled.div`
-  display : flex;
-  flex-direction : row;
-  position : fixed;
+  display: flex;
+  flex-direction: row;
+  position: fixed;
   z-index: 5;
-  top : 0px;
-  left : ${({show}) => show ? '0px' : '-250px'};
-  height : 100vh;
-  transition : 0.3 ease;
-  animation : ${({show}) => (show ? slideIn : slideOut)} 0.3s ease;
+  top: 0px;
+  left: ${({ show }) => (show === "true" ? "0" : "-250px")};
+  height: 100vh;
+  transition: 0.3s ease;
+  animation: ${({ show }) => (show === "true" ? slideIn : slideOut)} 0.3s ease;
 `
 
 

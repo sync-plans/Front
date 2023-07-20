@@ -5,11 +5,11 @@ const MyCalenderContext = createContext();
 
 function MyCalenderContext() {
 
-    const currentDate,setCurrentDate
+    const [currentDate,setCurrentDate] = useState()
 
   return (
     <MyCalenderContext.Provider>
-        
+
     </MyCalenderContext.Provider>
   )
 }

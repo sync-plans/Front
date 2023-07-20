@@ -64,4 +64,21 @@ const CustomDayHeader = styled.div`
   font-size: 20px;
 `;
 
-export {CalenderLayout,CalenderHeader,CalenderTitle,TitleName,TitleDate,ArrowBtn,CustomDayHeader}
+const TodayBtn = styled.button`
+    padding : 10px;
+    border : none;
+    border-radius : 5px;
+    font-weight : 600;
+    background-color : #0083DD;
+    color : white;
+    margin-top : 10px;
+
+    &:hover{
+      background-color: #0085ddea;
+    }
+    &:active{
+        background-color : #0c4164ea;
+    }
+`
+
+export {TodayBtn,CalenderLayout,CalenderHeader,CalenderTitle,TitleName,TitleDate,ArrowBtn,CustomDayHeader}
