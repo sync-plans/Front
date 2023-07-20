@@ -5,15 +5,14 @@ import KaKaoLogin from "../pages/KaKaoLogin";
 import Login from "../pages/Login";
 import Main from "../pages/Main";
 import TeamPlan from "../pages/TeamPlan";
-
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />}></Route>
-        <Route path="oauth/kakao/callback" element={<KaKaoLogin />}></Route>
-        <Route path="/main/:id?" element={<Main />}></Route>
-        <Route path="/teamplan" element={<TeamPlan/>}></Route>
+        <Route path="/kakao/login" element={<KaKaoLogin />}></Route>
+        <Route path="/main/:id" element={<Main />}></Route>
+        <Route path="/teamplan/:id" element={<TeamPlan/>}></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -1,18 +1,34 @@
-import axios from 'axios';
-import React, { useEffect } from 'react'
-import { styled } from 'styled-components';
-import {useCookies} from 'react-cookie'
+import React from 'react'
+import * as S from '../components/Login/Login.style'
+import {BiCalendar} from 'react-icons/bi'
 
 function Login() {
 
-  const [cookies,setCookie,removeCookie] = useCookies();
-
-// // 본인 rest api key값
-// const CLIENT_ID = '461fed9c8b217094081c492970bb8a6b';
-// // 리다이렉션시 보여줄 url경로
-// const REDIRECT_URI = 'http://localhost:3000/oauth/kakao/callback';
 
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`;
+
+
+const handleLogin = () => {
+    window.location.href = KAKAO_AUTH_URL
+}
+
+  return (
+    <S.LoginContainer>
+      <S.LoginBackGround>
+      <S.LoginBox>
+        <S.LoginWrraper>
+        <S.LoginTitle>Sync Plans <BiCalendar style={{fontSize : '50px'}}/></S.LoginTitle>
+        <S.KaKaoLoginBtn onClick={handleLogin}>
+          <img src='img/kakao_login_medium_narrow.png' alt='React'></img>
+        </S.KaKaoLoginBtn>
+        </S.LoginWrraper>
+      </S.LoginBox>
+      </S.LoginBackGround>
+    </S.LoginContainer>
+  )
+}
+
+/** api 로그인 테스트 코드들 */
 // const KAKAO_AUTH_URL = `${process.env.REACT_APP_SERVER_URL}/user/kakao/callback`;
 
 // const loginData = {
@@ -29,128 +45,34 @@ const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${proc
 
 // value()
 
-const value = async () => {
+// useEffect(() => {
+//   value()
+// }, []);
 
-  const loginData = {
-    username : "choi",
-    password : 1234
-  }
-  const response = await axios.post(`https://ec2-13-125-17-195.ap-northeast-2.compute.amazonaws.com:8080/api/user/login`, loginData, {
-    withCredentials : true
-  })
+// const value = async () => {
 
-  const get_token = response.headers['authorization']
-  // console.log(get_token)
-  const plan_token = get_token.replaceAll('%20', ' ')
-  console.log(plan_token)
-  // console.log(response)
-
-  setCookie('myCookie', plan_token, '/')
-
-  // const getdata = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/my-plan`, {
-  //   headers: {
-  //     Authorization : cookies['myCookie']
-  //   }
-  // })
-
-
-}
-
-useEffect(() => {
-  value()
-}, []);
-
-
-
-// const myplan = async () => {
-//   const response = await axios.get(`https://ec2-13-125-17-195.ap-northeast-2.compute.amazonaws.com:8080/api/my-plan`, {
-//     headers : {
-//       Authorization: cookies['myCookie']
-//     }
+//   const loginData = {
+//     username : "choi",
+//     password : 1234
+//   }
+//   const response = await axios.post(`https://ec2-13-125-17-195.ap-northeast-2.compute.amazonaws.com:8080/api/user/login`, loginData, {
+//     withCredentials : true
 //   })
-//   console.log(response)
+//   const get_token = response.headers['authorization']
+//   const plan_token = get_token.replaceAll('%20', ' ')
+
+
+
+
+//   setCookie('myCookie', plan_token, '/')
 // }
 
 
+// const payload = cookies['myCookie']
+// const userName = payload.substring(payload.indexOf('.')+1,payload.lastIndexOf('.'));
+// const dec = JSON.parse(base64.decode(userName));
 
 
-
-const handleLogin = () => {
-  window.location.href = 'http://localhost:4000/main/'
-}
-  return (
-    <LoginContainer>
-      <LoginBackGround>
-      <LoginBox>
-        <LoginWrraper>
-        {/* <h1>Sync Plans</h1> */}
-        <LoginTitle src='img/twitter_header_photo_1.png' alt='제목이미지'></LoginTitle>
-        <KaKaoLoginBtn onClick={handleLogin}>
-          <img src='img/kakao_login_medium_narrow.png' alt='React'></img>
-        </KaKaoLoginBtn>
-        </LoginWrraper>
-      </LoginBox>
-      </LoginBackGround>
-    </LoginContainer>
-  )
-}
-
-const LoginContainer = styled.div`
-    width : 100%;
-    height : 100vh;
-    position : relative;
-    opacity : 0.8;
-`
-
-const LoginBox = styled.div`
-    background-color : white;
-    width : 50%;
-    height : 500px;
-    padding : 15px;
-    position : fixed;
-    left : 50%;
-    top : 50%;
-    transform : translate(-50%,-50%);
-    border-radius : 30px;
-    display : flex;
-    justify-content : center;
-    align-items : center;
-    box-shadow : 0px 0px 10px;
-    border : none;
-    max-width : 350px;
-    background-color : rgb(246,248,252);
-`
-
-const KaKaoLoginBtn = styled.a`
-    width : 185px;
-    height : 45px;
-    border-radius : 15px;
-    border : none;
-    cursor : pointer;
-    background-image : url('../../../public/img/kakao_login_medium_narrow.png');
-`
-
-const LoginWrraper = styled.div`
-  display : flex;
-  flex-direction : column;
-  align-items : center;
-  gap : 200px;
-`
-
-const LoginBackGround = styled.div`
-  background-image : url('img/pxfuel (1).jpg');
-  width : 100%;
-  height : 100%;
-  background-repeat : no-repeat;
-  background-size : cover;
-  position : absolute;
-  top : 0;
-  left : 0;
-`
-
-const LoginTitle = styled.img`
-  width : 300px;
-`
 
 
 export default Login

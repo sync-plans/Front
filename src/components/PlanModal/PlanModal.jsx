@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { styled } from "styled-components";
 import { deletePlan, patchPlan } from "../../api/my-plan";
@@ -12,6 +12,10 @@ function PlanModal({ event, onclose }) {
   const [planContent, setPlanContent] = useState(event.content);
   const [startDate, setStartDate] = useState(dayjs(event.start).format('YYYY-MM-DDTHH:mm'));
   const [EndDate, setEndDate] = useState(dayjs(event.end).format('YYYY-MM-DDTHH:mm'));
+  const [selectedPriority, setSelectedPriority] = useState(event.priority)
+  const handlePriorityChange = (e) => {
+    setSelectedPriority(Number(e.target.value))
+}
 
 
 
@@ -27,6 +31,7 @@ function PlanModal({ event, onclose }) {
   const patchMutate = useMutation(patchPlan, {
     onSuccess: () => {
       queryClient.invalidateQueries('myplan');
+      onclose();
     }
   })
 
@@ -42,7 +47,7 @@ function PlanModal({ event, onclose }) {
       content : planContent,
       startDate : dayjs(startDate),
       endDate : dayjs(EndDate),
-      priority : 1,
+      priority : selectedPriority,
     }
     patchMutate.mutate({event, cookies, setData})
   }
@@ -52,8 +57,8 @@ function PlanModal({ event, onclose }) {
     setState(value)
   }
 
-  const handleDateChange = (event) => {
-    setStartDate(event.target.value);
+  const handleDateChange = (e, setState) => {
+    setState(e.target.value);
   };
 
   return (
@@ -69,6 +74,14 @@ function PlanModal({ event, onclose }) {
           <PlanDateInput type='datetime-local' value={startDate} onChange={(e) => handleDateChange(e,setStartDate)}></PlanDateInput>
           <PlanDateInput type='datetime-local' value={EndDate} onChange={(e) => handleDateChange(e, setEndDate)}></PlanDateInput>
         </PlanModalDateBox>
+        <div style={{display : 'flex', justifyContent : 'center'}}>
+          <select value={selectedPriority} onChange={handlePriorityChange}>
+                <option value={1}>우선순위1</option>
+                <option value={2}>우선순위2</option>
+                <option value={3}>우선순위3</option>
+                <option value={4}>기타순위</option>
+            </select>
+        </div>
         <PlanModalBtnBox>
           <PlanModalBtn bh='#0085ddea' bc='#0083DD;' onClick={() => handlePatchMyplan(event,cookies)}>수정</PlanModalBtn>
           <PlanModalBtn bh='#ed5e87d0' bc='#e33768ea;'onClick={() => handleDeleteMyplan(event,cookies)}>삭제</PlanModalBtn>
@@ -138,6 +151,7 @@ const PlanModalBtn = styled.button`
   color : white;
   font-weight : bold;
   background-color : ${({bc}) => bc};
+  font-size : 1.3rem;
   cursor : pointer;
 
   &:hover{

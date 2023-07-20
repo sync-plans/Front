@@ -1,8 +1,49 @@
 import { styled } from "styled-components";
+import { Calendar } from "react-big-calendar";
+
+const CustomCalendar = styled(Calendar)`
+  .rbc-month-view {
+    border: none;
+  }
+
+  .rbc-month-row {
+    border: none;
+  }
+
+  .rbc-header {
+    border-left: none;
+    border-right: none;
+    border-bottom : 3px double black;
+    margin-bottom : 1px;
+  }
+
+  .rbc-off-range-bg {
+    border: none;
+  }
+
+  .rbc-day-bg {
+    border-left: none;
+    border-right: none;
+  }
+
+  .rbc-toolbar-label {
+    display: none;
+  }
+  height: 100%;
+
+  .rbc-button-link {
+    border-radius : 100%;
+    padding : 1px;
+    font-size : 17px;
+    &:hover{
+      background : skyblue
+    }
+  }
+`;
 
 const CalenderLayout = styled.div`
   margin-top: 15px;
-  height: 80%;
+  height: 100%;
   width: 100%;
   padding: 15px;
   box-sizing: border-box;
@@ -10,7 +51,8 @@ const CalenderLayout = styled.div`
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0);
-  border: 1px solid black;
+  border: 0.1px solid black;
+  border-radius : 15px;
 `;
 
 const CalenderHeader = styled.div`
@@ -81,4 +123,4 @@ const TodayBtn = styled.button`
     }
 `
 
-export {TodayBtn,CalenderLayout,CalenderHeader,CalenderTitle,TitleName,TitleDate,ArrowBtn,CustomDayHeader}
+export {CustomCalendar,TodayBtn,CalenderLayout,CalenderHeader,CalenderTitle,TitleName,TitleDate,ArrowBtn,CustomDayHeader}

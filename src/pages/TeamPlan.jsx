@@ -2,7 +2,6 @@ import Header from "../components/Header/Header"
 import MyCalendar from "../components/MyCalendar/MyCalender"
 import Sidebar from "../components/Sidebar/Sidebar"
 import { teamPlan } from "../api/my-plan"
-import axios from "axios"
 
 function TeamPlan() {
   return (

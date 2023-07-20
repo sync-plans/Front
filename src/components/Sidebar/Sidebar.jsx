@@ -1,26 +1,30 @@
 import { keyframes, styled } from "styled-components"
-import {css} from "styled-components"
-import { useState } from "react";
-import PlanCreateModal from "../PlanCreateModal/PlanCreateModal";
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleSidebar } from "../../redux/modules/planSlice";
+import { useParams } from "react-router-dom";
+
+
+
 function Sidebar() {
-
-
-
-  const [toggleSideState, setToggleSideState] = useState(false);
-
+  
+  
+  const { id } = useParams();
+  const pathroot = '/main/' + id
+  const toggleSide = useSelector((state) => state.planSlice.my_plan.toggleSidebar)
+  const dispatch = useDispatch()
 
   const handleShowSidebar = () => {
-    setToggleSideState(!toggleSideState)
-    console.log(toggleSideState)
+      dispatch(toggleSidebar())
   }
+
   return (
     <>
-    <SidebarContainer show={toggleSideState.toString()}> 
+    <SidebarContainer show={toggleSide.toString()}> 
         <Navbar>
           <Nav>
             <div>
               <NavBrand>
-                <NavLogo href='/main'>
+                <NavLogo href={pathroot}>
                   Sync-plans
                 </NavLogo>
               </NavBrand>
@@ -43,7 +47,7 @@ function Sidebar() {
                   <NavName>팀 일정</NavName>
                 </NavLink>
 
-                <NavLink href='#'>
+                <NavLink href='/'>
                   <NavIcon>
                     <span className='material-symbols-outlined' style={{ fontSize: '40px' }}>
                       logout
@@ -163,19 +167,6 @@ const slideOut = keyframes`
   }
 `;
 
-
-// const SidebarContainer = styled.div.attrs((props) => )`
-//   display : flex;
-//   flex-direction : row;
-//   position : fixed;
-//   z-index: 5;
-//   top : 0px;
-//   left : ${({show}) => show ? '0px' : '-250px'};
-//   height : 100vh;
-//   transition : 0.3 ease;
-//   animation : ${({show}) => (show ? slideIn : slideOut)} 0.3s ease;
-// `
-
 const SidebarContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -187,36 +178,3 @@ const SidebarContainer = styled.div`
   transition: 0.3s ease;
   animation: ${({ show }) => (show === "true" ? slideIn : slideOut)} 0.3s ease;
 `
-
-
-
-    // <SidebarContainer value={value}>
-    //     <p>개인플랜</p>
-    //     <SidebarCreateBtn onClick={handleShowModal}><p>일정등록</p><AiOutlinePlusCircle style={{fontSize : '20px'}}/></SidebarCreateBtn>
-    //     {onState && <PlanCreateModal onclose={() => setOnState(null)}/>}
-    // </SidebarContainer>
-
-// const SidebarContainer = styled.div`
-//     width : 120px;
-//     height : 100vh;
-//     position : absolute;
-//     padding : 15px;
-//     top : 0px;
-//     left : -150px;
-//     z-index: 5;
-//     transition : left 0.3s ease;
-//     ${({value}) => value && css`
-//       left : 0;
-//     `
-//     }
-// `
-
-// const SidebarCreateBtn = styled.button`
-//   display :flex;
-//   align-items : center;
-//   justify-content : center;
-//   gap : 10px;
-//   border : none;
-//   background-color : transparent;
-//   cursor : pointer;
-// `

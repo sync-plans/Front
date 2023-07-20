@@ -1,16 +1,16 @@
 import Header from "../components/Header/Header";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Mycalender from "../components/MyCalendar/MyCalender";
-import { planId } from "../api/my-plan";
+import { useParams } from "react-router-dom";
 function Main() {
-
+  const {id} = useParams();
 
   return (
     <div>
       <Header />
       <div style={{ display: "flex" }}>
         <Sidebar />
-        <Mycalender plan={planId}/>
+        <Mycalender id={id}/>
       </div>
     </div>
   );
