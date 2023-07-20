@@ -11,7 +11,7 @@ const initialState = {
 
 
 const planSlice = createSlice({
-    name : 'my_plan',
+    name : 'planItem',
     initialState : initialState,
     reducers : {
         toggleSidebar: (state,action) => {

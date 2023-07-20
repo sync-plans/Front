@@ -1,65 +1,78 @@
 import React from 'react'
-import { styled } from 'styled-components';
+import * as S from '../components/Login/Login.style'
+import {BiCalendar} from 'react-icons/bi'
 
 function Login() {
 
-
-// // 본인 rest api key값
-// const CLIENT_ID = '461fed9c8b217094081c492970bb8a6b';
-// // 리다이렉션시 보여줄 url경로
-// const REDIRECT_URI = 'http://localhost:3000/oauth/kakao/callback';
 
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}&response_type=code`;
 
 
 const handleLogin = () => {
-  window.location.href = KAKAO_AUTH_URL
+    window.location.href = KAKAO_AUTH_URL
 }
+
   return (
-    <LoginContainer>
-      <LoginBox>
-        <div>
-        <h1>Sync Plans</h1>
-        <KaKaoLoginBtn onClick={handleLogin}>
+    <S.LoginContainer>
+      <S.LoginBackGround>
+      <S.LoginBox>
+        <S.LoginWrraper>
+        <S.LoginTitle>Sync Plans <BiCalendar style={{fontSize : '50px'}}/></S.LoginTitle>
+        <S.KaKaoLoginBtn onClick={handleLogin}>
           <img src='img/kakao_login_medium_narrow.png' alt='React'></img>
-        </KaKaoLoginBtn>
-        </div>
-      </LoginBox>
-    </LoginContainer>
+        </S.KaKaoLoginBtn>
+        </S.LoginWrraper>
+      </S.LoginBox>
+      </S.LoginBackGround>
+    </S.LoginContainer>
   )
 }
 
-const LoginContainer = styled.div`
-    background-color : rgb(212,235,215);
-    width : 100%;
-    height : 100vh;
-`
+/** api 로그인 테스트 코드들 */
+// const KAKAO_AUTH_URL = `${process.env.REACT_APP_SERVER_URL}/user/kakao/callback`;
 
-const LoginBox = styled.div`
-    background-color : #eee;
-    width : 50%;
-    height : 500px;
-    padding : 15px;
-    position : fixed;
-    left : 50%;
-    top : 50%;
-    transform : translate(-50%,-50%);
-    border-radius : 30px;
-    display : flex;
-    justify-content : center;
-    align-items : center;
-    box-shadow : 0px 0px 10px;
-    border : none;
-`
+// const loginData = {
+//   username: "choi5",
+//   password: 1234,
+//   }
 
-const KaKaoLoginBtn = styled.a`
-    width : 185px;
-    height : 45px;
-    border-radius : 15px;
-    border : none;
-    cursor : pointer;
-    background-image : url('../../../public/img/kakao_login_medium_narrow.png')
-`
+// const value = async () => {
+//   const response = await axios.post('https://ec2-13-125-17-195.ap-northeast-2.compute.amazonaws.com:8080/api/user/login',loginData,{
+//       withCredentials : true
+//   })
+//   console.log(response.headers['set-cookie'])
+// }
+
+// value()
+
+// useEffect(() => {
+//   value()
+// }, []);
+
+// const value = async () => {
+
+//   const loginData = {
+//     username : "choi",
+//     password : 1234
+//   }
+//   const response = await axios.post(`https://ec2-13-125-17-195.ap-northeast-2.compute.amazonaws.com:8080/api/user/login`, loginData, {
+//     withCredentials : true
+//   })
+//   const get_token = response.headers['authorization']
+//   const plan_token = get_token.replaceAll('%20', ' ')
+
+
+
+
+//   setCookie('myCookie', plan_token, '/')
+// }
+
+
+// const payload = cookies['myCookie']
+// const userName = payload.substring(payload.indexOf('.')+1,payload.lastIndexOf('.'));
+// const dec = JSON.parse(base64.decode(userName));
+
+
 
 
 export default Login

@@ -1,55 +1,50 @@
-import { keyframes, styled } from "styled-components"
-import { useDispatch, useSelector } from 'react-redux';
-import { toggleSidebar } from "../../redux/modules/planSlice";
-import { useParams } from "react-router-dom";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import './App.css';
 
+function SideTest() {
+  const [isMenuOpen, setMenuOpen] = useState(false);
 
-
-function Sidebar() {
-  
-  
-  const { id } = useParams();
-  const pathroot = '/main/' + id
-  const toggleSide = useSelector((state) => state.planSlice.my_plan.toggleSidebar)
-  const dispatch = useDispatch()
-
-  const handleShowSidebar = () => {
-      dispatch(toggleSidebar())
-  }
+  const toggleMenu = () => {
+    setMenuOpen(!isMenuOpen);
+  };
 
   return (
-    <>
-    <SidebarContainer show={toggleSide.toString()}> 
+    <div>
+      {!isMenuOpen && (
         <Navbar>
           <Nav>
             <div>
               <NavBrand>
-                <NavLogo href={pathroot}>
+                <NavLogo href='#'>
                   Sync-plans
+                  <span class='material-symbols-outlined' style={{ fontSize: '40px' }}>
+                    directions_run
+                  </span>
                 </NavLogo>
               </NavBrand>
               <div className='nav__list'>
-                <NavLink href='/main'>
+                <NavLink href='#'>
                   <NavIcon>
-                    <span className='material-symbols-outlined' style={{ fontSize: '40px' }}>
+                    <span class='material-symbols-outlined' style={{ fontSize: '40px' }}>
                       person
                     </span>
                   </NavIcon>
                   <NavName>내 일정</NavName>
                 </NavLink>
 
-                <NavLink href='/teamplan'>
+                <NavLink href='#'>
                   <NavIcon>
-                    <span className='material-symbols-outlined' style={{ fontSize: '40px' }}>
+                    <span class='material-symbols-outlined' style={{ fontSize: '40px' }}>
                       group
                     </span>
                   </NavIcon>
                   <NavName>팀 일정</NavName>
                 </NavLink>
 
-                <NavLink href='/'>
+                <NavLink href='#'>
                   <NavIcon>
-                    <span className='material-symbols-outlined' style={{ fontSize: '40px' }}>
+                    <span class='material-symbols-outlined' style={{ fontSize: '40px' }}>
                       logout
                     </span>
                   </NavIcon>
@@ -59,24 +54,24 @@ function Sidebar() {
             </div>
           </Nav>
         </Navbar>
-      <MenuToggleContainer>
-        <MenuToggle>
-          <span className='material-symbols-outlined' style={{ fontSize: '40px' }} onClick={handleShowSidebar}>
+      )}
+      <>
+        <MenuToggle onClick={toggleMenu}>
+          <span class='material-symbols-outlined' style={{ fontSize: '40px' }}>
             menu
           </span>
         </MenuToggle>
-      </MenuToggleContainer>
-    </SidebarContainer>
-    </>
+      </>
+    </div>
   );
-  }
+}
 
-export default Sidebar;
+export default SideTest;
 
 const Navbar = styled.div`
-  /* position: fixed; */
-  width: 250px;
-  height: 100vh;
+  position: fixed;
+  width: 300px;
+  height: 95vh;
   background-color: #12192c;
   color: #fff;
   padding: 20px 30px;
@@ -98,13 +93,12 @@ const NavBrand = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
-  white-space: nowrap;
 `;
 
 const NavLogo = styled.a`
   color: #fff;
   font-weight: 600;
-  font-size: 25px;
+  font-size: 30px;
   margin: 10px 25px;
 `;
 
@@ -136,45 +130,13 @@ const NavName = styled.span`
   border: 900;
 `;
 
-const MenuToggleContainer = styled.div`
-  width : 70px;
-`
-
 const MenuToggle = styled.button`
   font-size: 1.25rem;
   padding: 0.75rem;
+  cursor: pointer;
   position: absolute;
+  top: 10px;
+  left: 310px;
   border: none;
   background: transparent;
-  cursor : pointer;
 `;
-
-const slideIn = keyframes`
-  from {
-    left: -250px;
-  }
-  to {
-    left: 0;
-  }
-`;
-
-const slideOut = keyframes`
-  from {
-    left: 0;
-  }
-  to {
-    left: -250px;
-  }
-`;
-
-const SidebarContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  position: fixed;
-  z-index: 5;
-  top: 0px;
-  left: ${({ show }) => (show === "true" ? "0" : "-250px")};
-  height: 100vh;
-  transition: 0.3s ease;
-  animation: ${({ show }) => (show === "true" ? slideIn : slideOut)} 0.3s ease;
-`
